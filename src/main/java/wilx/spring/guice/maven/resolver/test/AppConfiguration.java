@@ -3,13 +3,7 @@ package wilx.spring.guice.maven.resolver.test;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
-import org.apache.commons.lang3.SystemUtils;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.building.DefaultModelBuilderFactory;
 import org.apache.maven.model.building.DefaultModelProcessor;
-import org.apache.maven.model.building.ModelBuilder;
-import org.apache.maven.model.building.ModelBuildingRequest;
-import org.apache.maven.model.building.ModelProblemCollector;
 import org.apache.maven.model.building.ModelProcessor;
 import org.apache.maven.model.composition.DefaultDependencyManagementImporter;
 import org.apache.maven.model.composition.DependencyManagementImporter;
@@ -56,40 +50,26 @@ import org.apache.maven.model.superpom.SuperPomProvider;
 import org.apache.maven.model.validation.DefaultModelValidator;
 import org.apache.maven.model.validation.ModelValidator;
 import org.apache.maven.repository.internal.MavenResolverModule;
-import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
 import org.eclipse.aether.impl.LocalRepositoryProvider;
-import org.eclipse.aether.impl.MetadataGeneratorFactory;
-import org.eclipse.aether.impl.guice.AetherModule;
 import org.eclipse.aether.internal.impl.DefaultLocalRepositoryProvider;
 import org.eclipse.aether.internal.impl.DefaultTrackingFileManager;
 import org.eclipse.aether.internal.impl.EnhancedLocalRepositoryManagerFactory;
 import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
 import org.eclipse.aether.internal.impl.TrackingFileManager;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.spi.localrepo.LocalRepositoryManagerFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
-import org.eclipse.sisu.space.SpaceModule;
-import org.eclipse.sisu.space.URLClassSpace;
-import org.eclipse.sisu.wire.WireModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.BootstrapRegistry;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.guice.annotation.EnableGuiceModules;
 
 import javax.inject.Named;
-import javax.inject.Qualifier;
 import javax.inject.Singleton;
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -101,23 +81,6 @@ import java.util.Set;
 public class AppConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfiguration.class);
 
-    //  @Autowired
-//    private Injector injector;
-
-//    @Bean
-//    public WireModule wireModule() {
-//        return new WireModule(                       // auto-wires unresolved dependencies
-//                //new AetherModule(),
-//                new SpaceModule(                     // scans and binds @Named components
-//                        new URLClassSpace(App.class.getClassLoader())    // abstracts class/resource finding
-//                ));
-//    }
-
-//    @Bean
-//    public MavenResolverModule mavenResolverModule() {
-//        return new MavenResolverModule();
-//    }
-
     @Bean
     public MavenResolverModule guiceAetherModule() {
         return new MavenResolverModule();
@@ -127,20 +90,6 @@ public class AppConfiguration {
     public OurGuiceModule ourGuiceModule() {
         return new OurGuiceModule();
     }
-
-    public void configureRepositorySystem(@Autowired final RepositorySystem repositorySystem) {
-
-    }
-
-//    @Bean
-//    public BasicRepositoryConnectorFactory basicRepositoryConnectorFactory() {
-//        return this.injector.getInstance(BasicRepositoryConnectorFactory.class);
-//    }
-//
-//    @Bean
-//    public DefaultRepositoryConnectorProvider defaultRepositoryConnectorProvider() {
-//        return this.injector.getInstance(DefaultRepositoryConnectorProvider.class);
-//    }
 
     public static class OurGuiceModule extends AbstractModule {
         @Override
